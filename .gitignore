@@ -1,0 +1,12 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+.DS_Store
+server.out
+*.log
+jobs/*.json
+jobs/*.log
+index.html.bak.*
+data/
+.env

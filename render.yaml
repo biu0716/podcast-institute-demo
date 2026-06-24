@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: podcast-institute-demo
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    envVars:
+      - key: PODCAST_ASSISTANT_HOST
+        value: 0.0.0.0
+      - key: PODCAST_DEMO_MODE
+        value: "1"
+      - key: PODCAST_QUICK_ENGINE
+        value: pipeline
+      - key: PODCAST_COMPARISON_ENGINE
+        value: deterministic
+      - key: PODCAST_DISABLE_UV
+        value: "1"
+      - key: PODCAST_ASSISTANT_ROOT
+        value: /opt/render/project/src/data
+      - key: PODCAST_LIBRARY_DIR
+        value: /opt/render/project/src/data/网页书架
+      - key: PODCAST_JOBS_DIR
+        value: /opt/render/project/src/data/jobs

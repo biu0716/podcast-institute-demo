@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>播客研究所 · 项目介绍</title>
+  <style>
+    :root {
+      --bg:#0b0c12;
+      --panel:#171822;
+      --panel-2:#222331;
+      --line:#343548;
+      --line-soft:#252638;
+      --crt:#030811;
+      --orange:#ff5c1a;
+      --orange-soft:#ff8a55;
+      --paper:#eee8d9;
+      --paper-soft:#f7f0df;
+      --ink:#171720;
+      --muted:#8b8c9d;
+      --paper-muted:#70685d;
+      --mono:"SFMono-Regular","Menlo","Monaco","Consolas","Courier New",monospace;
+      --sans:"PingFang SC","Noto Sans SC",-apple-system,BlinkMacSystemFont,sans-serif;
+      --serif:"Songti SC","Noto Serif SC","STSong",serif;
+    }
+
+    * { box-sizing:border-box }
+    html { scroll-behavior:smooth }
+    body {
+      margin:0;
+      min-height:100vh;
+      color:#f0eadc;
+      background:
+        radial-gradient(circle at 80% 0%, #292a39 0, transparent 34%),
+        radial-gradient(circle at 12% 22%, #1b1c27 0, transparent 30%),
+        linear-gradient(180deg,#11121a 0,#08090e 62%,#050506 100%);
+      font-family:var(--sans);
+      overflow-x:hidden;
+    }
+
+    body::before {
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px),
+        radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,.42) 100%);
+      mix-blend-mode:screen;
+      opacity:.5;
+      z-index:10;
+    }
+
+    a { color:inherit }
+
+    .deck-shell {
+      width:min(1120px, calc(100% - 32px));
+      margin:0 auto;
+      padding:18px 0 80px;
+    }
+
+    .topbar {
+      position:sticky;
+      top:12px;
+      z-index:20;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      min-height:46px;
+      padding:0 16px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(38,38,50,.94),rgba(24,24,34,.94));
+      backdrop-filter:blur(14px);
+      box-shadow:0 14px 40px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+      color:#8d8fa1;
+      font:900 .72rem var(--mono);
+      letter-spacing:.18em;
+      text-transform:uppercase;
+    }
+
+    .brand-mark {
+      display:grid;
+      place-items:center;
+      width:22px;
+      height:22px;
+      border-radius:2px;
+      color:#12131a;
+      background:linear-gradient(180deg,#ff7a32,#ff4f17);
+      box-shadow:0 0 14px rgba(255,92,26,.46), inset 0 1px 0 rgba(255,255,255,.32);
+      font:900 .6rem var(--mono);
+      letter-spacing:0;
+    }
+
+    .nav {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:#797a8b;
+      font:900 .65rem var(--mono);
+    }
+
+    .nav a {
+      padding:7px 10px;
+      border:1px solid transparent;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+
+    .nav a:hover {
+      border-color:#444658;
+      color:#ff8a55;
+    }
+
+    .slides {
+      display:grid;
+      gap:22px;
+      margin-top:18px;
+    }
+
+    .slide {
+      position:relative;
+      min-height:580px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,#20212d,#15161f);
+      box-shadow:0 32px 90px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.06);
+      overflow:hidden;
+    }
+
+    .slide::before,
+    .slide::after {
+      content:"+";
+      position:absolute;
+      top:14px;
+      display:grid;
+      place-items:center;
+      width:16px;
+      height:16px;
+      border:1px solid #424254;
+      border-radius:50%;
+      color:#555568;
+      background:#242432;
+      font:400 14px var(--mono);
+      z-index:2;
+    }
+
+    .slide::before { left:14px }
+    .slide::after { right:14px }
+
+    .slide-inner {
+      position:relative;
+      z-index:1;
+      min-height:580px;
+      padding:44px;
+    }
+
+    .screen {
+      position:relative;
+      border:2px solid #0b1627;
+      background:#030914;
+      box-shadow:inset 0 0 64px rgba(0,0,0,.92), 0 0 0 8px #101119;
+      overflow:hidden;
+    }
+
+    .screen::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,.04) 2px 3px),
+        radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,.72) 100%);
+      z-index:3;
+    }
+
+    .kicker {
+      position:relative;
+      z-index:4;
+      color:var(--orange);
+      font:900 .68rem var(--mono);
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      opacity:.72;
+    }
+
+    .hero-screen {
+      min-height:358px;
+      padding:42px 46px;
+    }
+
+    .hero-title {
+      position:relative;
+      z-index:4;
+      max-width:720px;
+      margin:16px 0 0;
+      color:#ff7a32;
+      font-family:var(--serif);
+      font-size:clamp(3.2rem, 9vw, 7.2rem);
+      line-height:.92;
+      letter-spacing:-.06em;
+      text-shadow:0 0 18px rgba(255,92,26,.62), 0 0 40px rgba(255,92,26,.22);
+    }
+
+    .hero-title span {
+      animation:cursorBlink 1.1s steps(1) infinite;
+      font-size:.42em;
+      margin-left:.08em;
+      vertical-align:.18em;
+    }
+
+    .hero-sub {
+      position:relative;
+      z-index:4;
+      margin:18px 0 0;
+      max-width:560px;
+      color:#ff8a55;
+      font-weight:800;
+      line-height:1.65;
+      opacity:.84;
+    }
+
+    .signal {
+      position:relative;
+      z-index:4;
+      display:flex;
+      align-items:end;
+      gap:3px;
+      height:60px;
+      margin-top:44px;
+    }
+
+    .signal i {
+      width:4px;
+      min-height:8px;
+      background:#ff5c1a;
+      box-shadow:0 0 10px rgba(255,92,26,.6);
+      animation:bar 840ms ease-in-out infinite alternate;
+    }
+
+    .signal i:nth-child(2n) { animation-duration:620ms }
+    .signal i:nth-child(3n) { animation-duration:1120ms }
+
+    .hero-grid {
+      display:grid;
+      grid-template-columns:1fr 320px;
+      gap:22px;
+      margin-top:22px;
+    }
+
+    .receipt {
+      position:relative;
+      background:var(--paper);
+      color:var(--ink);
+      border:1px solid #d5cbb8;
+      box-shadow:0 24px 56px rgba(0,0,0,.36), inset 0 1px 0 rgba(255,255,255,.75);
+      padding:28px 30px 30px 72px;
+      min-height:210px;
+    }
+
+    .receipt::before {
+      content:"";
+      position:absolute;
+      left:24px;
+      top:0;
+      bottom:0;
+      width:12px;
+      background:radial-gradient(circle,#090a0d 0 5px,transparent 5.6px) center 25px/12px 44px repeat-y;
+    }
+
+    .receipt::after {
+      content:"";
+      position:absolute;
+      left:50px;
+      top:0;
+      bottom:0;
+      border-left:1px dotted rgba(55,50,44,.46);
+    }
+
+    .receipt > * { position:relative; z-index:1 }
+
+    .receipt h2,
+    .paper-card h3,
+    .statement h2 {
+      margin:0;
+      font-family:var(--serif);
+      font-weight:800;
+      letter-spacing:-.02em;
+      color:#15151d;
+    }
+
+    .receipt h2 {
+      font-size:clamp(1.7rem,4vw,2.7rem);
+      line-height:1.15;
+    }
+
+    .receipt p {
+      color:var(--paper-muted);
+      line-height:1.8;
+      margin:14px 0 0;
+    }
+
+    .receipt-label,
+    .section-no {
+      color:#ad5935;
+      font:900 .7rem var(--mono);
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    .metric-stack {
+      display:grid;
+      gap:12px;
+    }
+
+    .metric {
+      border:1px solid #373848;
+      background:#151620;
+      padding:18px;
+      min-height:112px;
+    }
+
+    .metric strong {
+      display:block;
+      color:#ff7a32;
+      font:900 2rem var(--mono);
+      letter-spacing:-.08em;
+      text-shadow:0 0 16px rgba(255,92,26,.28);
+    }
+
+    .metric span {
+      display:block;
+      color:#858698;
+      margin-top:8px;
+      font-size:.88rem;
+      line-height:1.55;
+    }
+
+    .two-col {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .paper-card {
+      background:var(--paper);
+      color:var(--ink);
+      border:1px solid #d6cbb8;
+      padding:24px;
+      box-shadow:0 18px 42px rgba(0,0,0,.3);
+    }
+
+    .paper-card h3 {
+      font-size:1.32rem;
+      line-height:1.35;
+      margin-top:0;
+      margin-bottom:12px;
+    }
+
+    .paper-card p,
+    .paper-card li {
+      color:var(--paper-muted);
+      line-height:1.8;
+      margin:.55em 0;
+    }
+
+    .paper-card ul {
+      padding-left:1.2em;
+      margin:0;
+    }
+
+    .dark-card {
+      border:1px solid #343548;
+      background:#11121a;
+      color:#d8d3ca;
+      padding:24px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    }
+
+    .dark-card h3 {
+      margin:0 0 12px;
+      color:#f0eadc;
+      font-size:1.32rem;
+      line-height:1.35;
+    }
+
+    .dark-card .receipt-label {
+      color:#ff8a55;
+    }
+
+    .dark-card p,
+    .dark-card li {
+      color:#9697a8;
+      line-height:1.75;
+    }
+
+    .product-flow {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .flow-step {
+      min-height:172px;
+      background:#f0eadc;
+      color:#171720;
+      border:1px solid #d3c8b5;
+      padding:18px 16px;
+      position:relative;
+    }
+
+    .flow-step::before {
+      content:attr(data-step);
+      display:block;
+      color:#ad5935;
+      font:900 .72rem var(--mono);
+      letter-spacing:.12em;
+      margin-bottom:16px;
+    }
+
+    .flow-step strong {
+      display:block;
+      font-size:1.05rem;
+      margin-bottom:8px;
+    }
+
+    .flow-step span {
+      color:#70685d;
+      font-size:.88rem;
+      line-height:1.7;
+    }
+
+    .machine-demo {
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .mini-terminal {
+      min-height:286px;
+      padding:30px;
+    }
+
+    .terminal-title {
+      position:relative;
+      z-index:4;
+      color:#ff7a32;
+      font-family:var(--serif);
+      font-size:3.2rem;
+      line-height:1;
+      margin:34px 0 8px;
+      text-shadow:0 0 22px rgba(255,92,26,.5);
+    }
+
+    .terminal-copy {
+      position:relative;
+      z-index:4;
+      color:#ff8a55;
+      font:800 .86rem var(--sans);
+    }
+
+    .capability-list {
+      display:grid;
+      gap:0;
+      align-content:center;
+      border-top:1px solid #343548;
+      border-bottom:1px solid #343548;
+    }
+
+    .capability-item {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      min-height:54px;
+      border:0;
+      border-bottom:1px solid #2b2c3c;
+      background:transparent;
+      color:#d8d3ca;
+      font:900 .95rem var(--sans);
+      box-shadow:none;
+      padding:0 8px;
+    }
+
+    .capability-item:last-child {
+      border-bottom:0;
+    }
+
+    .capability-item::before {
+      content:attr(data-no);
+      color:#626477;
+      font:900 .68rem var(--mono);
+      letter-spacing:.14em;
+    }
+
+    .capability-item::after {
+      content:"";
+      width:32px;
+      height:2px;
+      background:#343548;
+    }
+
+    .capability-item.is-primary::after {
+      background:#ff5c1a;
+      box-shadow:0 0 10px rgba(255,92,26,.35);
+    }
+
+    .architecture {
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .arch-node {
+      border:1px solid #343548;
+      background:#11121a;
+      padding:18px;
+      min-height:140px;
+    }
+
+    .arch-node strong {
+      display:block;
+      color:#ff8a55;
+      margin-bottom:8px;
+      font:900 .82rem var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .arch-node span {
+      color:#9a9bad;
+      line-height:1.75;
+      font-size:.9rem;
+    }
+
+    .statement {
+      display:grid;
+      grid-template-columns:.9fr 1.1fr;
+      gap:24px;
+      align-items:center;
+      min-height:490px;
+    }
+
+    .statement h2 {
+      color:#f0eadc;
+      font-size:clamp(2.4rem,6vw,4.8rem);
+      line-height:1.05;
+      text-shadow:0 0 26px rgba(255,92,26,.18);
+    }
+
+    .statement p {
+      color:#a5a6b8;
+      line-height:1.85;
+      font-size:1.02rem;
+    }
+
+    .cta-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:24px;
+    }
+
+    .cta {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:42px;
+      padding:0 16px;
+      border:1px solid #ff5c1a;
+      color:#ff8a55;
+      background:#171821;
+      text-decoration:none;
+      font-weight:900;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .cta.secondary {
+      border-color:#3d3f52;
+      color:#d8d3ca;
+    }
+
+    .cta:active {
+      transform:translateY(2px);
+    }
+
+    .side-index {
+      position:absolute;
+      right:28px;
+      bottom:24px;
+      color:#55576a;
+      font:900 .68rem var(--mono);
+      letter-spacing:.18em;
+    }
+
+    @keyframes cursorBlink {
+      0%,45% { opacity:1 }
+      50%,95% { opacity:0 }
+      100% { opacity:1 }
+    }
+
+    @keyframes bar {
+      from { height:8px; opacity:.45 }
+      to { height:42px; opacity:1 }
+    }
+
+    @media (max-width: 860px) {
+      .deck-shell { width:min(100% - 18px, 1120px); padding-top:10px }
+      .topbar { position:relative; top:0; align-items:flex-start; flex-direction:column; padding:12px }
+      .nav { width:100%; overflow:auto; padding-bottom:2px }
+      .slide,
+      .slide-inner { min-height:auto }
+      .slide-inner { padding:26px 18px }
+      .hero-grid,
+      .two-col,
+      .machine-demo,
+      .statement { grid-template-columns:1fr }
+      .product-flow,
+      .architecture { grid-template-columns:1fr }
+      .hero-screen { min-height:320px; padding:30px 24px }
+      .hero-title { font-size:3.6rem }
+      .receipt { padding:24px 22px 26px 58px }
+      .statement h2 { font-size:2.6rem }
+    }
+
+    @media print {
+      body { background:#fff }
+      body::before,.topbar { display:none }
+      .deck-shell { width:100%; padding:0 }
+      .slide { break-after:page; box-shadow:none }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">PI</span><span>Podcast Institute · 播客研究所</span></div>
+      <nav class="nav" aria-label="项目页导航">
+        <a href="#value">价值</a>
+        <a href="#capability">能力</a>
+        <a href="#decision">决策</a>
+        <a href="#system">工程</a>
+        <a href="/">打开产品</a>
+      </nav>
+    </header>
+
+    <main class="slides">
+      <section class="slide" id="cover">
+        <div class="slide-inner">
+          <div class="screen hero-screen">
+            <div class="kicker">PROJECT DOSSIER</div>
+            <h1 class="hero-title">播客研究所<span>▮</span></h1>
+            <p class="hero-sub">把多期播客整理成可阅读、可检索、可分享的专题研究网页。</p>
+            <div class="signal" aria-hidden="true">
+              <i style="height:18px"></i><i style="height:32px"></i><i style="height:12px"></i><i style="height:40px"></i><i style="height:26px"></i>
+              <i style="height:34px"></i><i style="height:16px"></i><i style="height:38px"></i><i style="height:22px"></i><i style="height:31px"></i>
+              <i style="height:14px"></i><i style="height:36px"></i><i style="height:25px"></i><i style="height:42px"></i><i style="height:20px"></i>
+              <i style="height:28px"></i><i style="height:15px"></i><i style="height:33px"></i><i style="height:24px"></i><i style="height:37px"></i>
+            </div>
+          </div>
+          <div class="hero-grid">
+            <article class="receipt">
+              <div class="receipt-label">PROJECT INTRO</div>
+              <h2>面向知识工作者的播客内容整理工具</h2>
+              <p>用户可以粘贴播客文稿、输入研究问题，或提交多期小宇宙单集链接。系统会围绕同一主题整理材料，提取观点，比较多期节目的共识、分歧和独有观点，并生成一份可归档、可搜索、可分享的专题网页。</p>
+            </article>
+            <div class="metric-stack">
+              <div class="metric"><strong>3</strong><span>三种输入路径：文稿、问题、链接。</span></div>
+              <div class="metric"><strong>HTML</strong><span>最终产物：可归档、可搜索、可分享的专题网页。</span></div>
+            </div>
+          </div>
+          <div class="side-index">00 / COVER</div>
+        </div>
+      </section>
+
+      <section class="slide" id="value">
+        <div class="slide-inner">
+          <div class="two-col">
+            <article class="paper-card">
+              <div class="receipt-label">PRODUCT VALUE</div>
+              <h3>把长音频转化为结构化研究材料</h3>
+              <p>高质量播客中包含大量深度讨论。播客研究所将这些长音频内容转化为结构化研究材料，让用户可以快速理解议题、回看观点、确认来源，并把分析结果分享给没有听过原节目的读者。</p>
+            </article>
+            <article class="dark-card">
+              <h3>解决的不是“总结”，而是“复用”</h3>
+              <ul>
+                <li>快速理解一个议题，而不是只得到单集摘要。</li>
+                <li>横向比较多期节目中的共识、分歧和独有观点。</li>
+                <li>确认每个判断来自听稿、简介、公开资料还是 AI 推断。</li>
+                <li>把播客内容变成可以保存和分享的研究资产。</li>
+              </ul>
+            </article>
+          </div>
+          <div class="product-flow">
+            <div class="flow-step" data-step="01"><strong>输入很轻</strong><span>可以从一个问题、一段文稿或几条链接开始。</span></div>
+            <div class="flow-step" data-step="02"><strong>先出速读</strong><span>不让用户等待十几分钟，先获得观点地图。</span></div>
+            <div class="flow-step" data-step="03"><strong>证据分层</strong><span>区分听稿、简介、公开资料和系统推断。</span></div>
+            <div class="flow-step" data-step="04"><strong>网页归档</strong><span>自动保存到书架，可搜索、可分享、可继续升级。</span></div>
+          </div>
+          <div class="side-index">01 / VALUE</div>
+        </div>
+      </section>
+
+      <section class="slide" id="capability">
+        <div class="slide-inner">
+          <div class="machine-demo">
+            <div class="screen mini-terminal">
+              <div class="kicker">CORE CAPABILITY</div>
+              <div class="terminal-title">核心能力</div>
+              <div class="terminal-copy">从多期播客中整理观点、标注来源、生成专题。</div>
+              <div class="signal" aria-hidden="true">
+                <i style="height:18px"></i><i style="height:30px"></i><i style="height:12px"></i><i style="height:36px"></i><i style="height:24px"></i>
+                <i style="height:28px"></i><i style="height:14px"></i><i style="height:34px"></i><i style="height:22px"></i><i style="height:38px"></i>
+              </div>
+            </div>
+            <div class="capability-list" aria-label="核心能力示意">
+              <div class="capability-item" data-no="01">跨集比对</div>
+              <div class="capability-item" data-no="02">观点地图</div>
+              <div class="capability-item is-primary" data-no="03">网页归档</div>
+            </div>
+          </div>
+          <div class="two-col" style="margin-top:18px">
+            <article class="paper-card">
+              <h3>六个核心能力</h3>
+              <p>跨集比对、观点地图、来源标注、网页归档、书内搜索、联网检索，共同把播客从“听完即消失”的内容，变成可以继续研究和传播的材料。</p>
+            </article>
+            <article class="paper-card">
+              <h3>来源边界清楚</h3>
+              <p>系统会区分听稿、节目简介、公开资料和 AI 推断，避免把节目观点、公开资料和系统分析混在一起。</p>
+            </article>
+          </div>
+          <div class="side-index">02 / CAPABILITY</div>
+        </div>
+      </section>
+
+      <section class="slide" id="decision">
+        <div class="slide-inner">
+          <article class="receipt">
+            <div class="receipt-label">PRODUCT DECISION</div>
+            <h2>先让用户快速拿到可读结果</h2>
+            <p>速读版优先生成，帮助用户先获得可阅读结果；精读版按需补全文稿，控制等待时间和 ASR 成本；来源类型明确标注，保证节目观点、公开资料和 AI 推断之间的边界。</p>
+          </article>
+          <div class="product-flow">
+            <div class="flow-step" data-step="01"><strong>速读优先</strong><span>先获得观点地图和专题网页，不让用户长时间等待。</span></div>
+            <div class="flow-step" data-step="02"><strong>精读按需</strong><span>只有需要更强依据时，再补全文稿和 ASR。</span></div>
+            <div class="flow-step" data-step="03"><strong>来源标注</strong><span>明确区分听稿、简介、公开资料和 AI 推断。</span></div>
+            <div class="flow-step" data-step="04"><strong>自动归档</strong><span>专题页进入网页书架，成为可复用资产。</span></div>
+          </div>
+          <div class="cta-row">
+            <a class="cta" href="/">打开产品 Demo</a>
+            <a class="cta secondary" href="/library">查看网页书架</a>
+          </div>
+          <div class="side-index">03 / DECISION</div>
+        </div>
+      </section>
+
+      <section class="slide" id="system">
+        <div class="slide-inner">
+          <div class="statement">
+            <div>
+              <div class="kicker">SYSTEM DESIGN</div>
+              <h2>完整应用链路，而不是单点 prompt demo</h2>
+            </div>
+            <p>前端入口负责接收文稿、问题或链接；后端任务负责解析、抓取和状态管理；pipeline 完成材料清洗、观点提取、跨集整合和来源标注；HTML 生成模块输出专题网页；网页书架负责保存、打开、检索和分享。</p>
+          </div>
+          <div class="architecture">
+            <div class="arch-node"><strong>Frontend</strong><span>入口页、任务进度、网页书架和专题阅读页，形成完整可演示闭环。</span></div>
+            <div class="arch-node"><strong>Pipeline</strong><span>解析链接、抓取资料、复用缓存、整理观点、标注来源并生成 HTML。</span></div>
+            <div class="arch-node"><strong>Archive</strong><span>单文件 HTML 自动保存到书架，支持打开、检索和分享。</span></div>
+          </div>
+          <div class="side-index">04 / SYSTEM</div>
+        </div>
+      </section>
+
+      <section class="slide" id="next">
+        <div class="slide-inner">
+          <div class="two-col">
+            <article class="paper-card">
+              <div class="receipt-label">DEMO SCOPE</div>
+              <h3>线上面试 Demo 版开放稳定路径</h3>
+              <ul>
+                <li>用户可以粘贴小宇宙单集链接。</li>
+                <li>系统生成速读版专题。</li>
+                <li>生成结果自动保存到网页书架。</li>
+                <li>ASR、精读升级、密钥配置、剪贴板监听和问题模式暂时关闭。</li>
+              </ul>
+            </article>
+            <article class="dark-card">
+              <div class="receipt-label">SUMMARY</div>
+              <h3>项目总结</h3>
+              <p>播客研究所体现的是从内容理解到产品化工作流的完整设计能力。它将长音频内容转化为结构化研究材料，并围绕输入路径、处理流程、来源规则、交付物形态和部署边界完成了产品闭环设计。</p>
+            </article>
+          </div>
+          <div class="cta-row">
+            <a class="cta" href="/">体验产品</a>
+            <a class="cta secondary" href="/library">看已有专题</a>
+          </div>
+          <div class="side-index">05 / NEXT</div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

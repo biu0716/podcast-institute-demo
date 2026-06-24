@@ -1,0 +1,1965 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>播客研究所</title>
+  <style>
+    @font-face {
+      font-family:"JetBrains Mono";
+      src:url("./assets/fonts/JetBrainsMono-Regular.ttf") format("truetype");
+      font-weight:400;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face {
+      font-family:"JetBrains Mono";
+      src:url("./assets/fonts/JetBrainsMono-Medium.ttf") format("truetype");
+      font-weight:500 900;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face {
+      font-family:"Noto Sans SC";
+      src:url("./assets/fonts/NotoSansCJKsc-Light.otf") format("opentype");
+      font-weight:300;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face {
+      font-family:"Noto Sans SC";
+      src:url("./assets/fonts/NotoSansCJKsc-Regular.otf") format("opentype");
+      font-weight:400;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face {
+      font-family:"Noto Sans SC";
+      src:url("./assets/fonts/NotoSansCJKsc-Medium.otf") format("opentype");
+      font-weight:500 900;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face {
+      font-family:"Noto Serif SC";
+      src:url("./assets/fonts/NotoSerifCJKsc-Light.otf") format("opentype");
+      font-weight:300;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face {
+      font-family:"Noto Serif SC";
+      src:url("./assets/fonts/NotoSerifCJKsc-Regular.otf") format("opentype");
+      font-weight:400;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face {
+      font-family:"Noto Serif SC";
+      src:url("./assets/fonts/NotoSerifCJKsc-Medium.otf") format("opentype");
+      font-weight:500;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face {
+      font-family:"Noto Serif SC";
+      src:url("./assets/fonts/NotoSerifCJKsc-SemiBold.otf") format("opentype");
+      font-weight:600 900;
+      font-style:normal;
+      font-display:swap;
+    }
+    :root {
+      --bg:#101116;
+      --panel:#202129;
+      --panel-edge:#3a3a4e;
+      --panel-soft:#2c2c3a;
+      --crt:#050708;
+      --crt-line:#ff5c1a24;
+      --orange:#ff5c1a;
+      --orange-soft:#ff8b57;
+      --cream:#f0eadc;
+      --paper:#eee8d9;
+      --paper-dark:#d9d0bc;
+      --ink:#181824;
+      --muted:#8c877c;
+      --rule:#c8bda8;
+      --green:#315f48;
+      --danger:#a23c2b;
+      --blue:#2f5f9d;
+      --mono:"JetBrains Mono","Courier New","SFMono-Regular",Menlo,monospace;
+      --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+    }
+
+    * { box-sizing:border-box }
+
+    body {
+      margin:0;
+      min-height:100vh;
+      color:var(--cream);
+      background:
+        radial-gradient(circle at 50% -10%, #343540 0, #171821 36%, #090a0e 72%, #050506 100%),
+        #090a0e;
+      font-family:var(--sans);
+    }
+
+    button, textarea, input, select { font:inherit }
+    button { -webkit-tap-highlight-color:transparent }
+
+    main {
+      width:min(760px, calc(100% - 32px));
+      margin:0 auto;
+      padding:16px 0 72px;
+    }
+
+    .topbar {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      margin:0;
+      min-height:45px;
+      padding:0 30px;
+      border:1px solid #343548;
+      border-bottom:0;
+      border-radius:2px 2px 0 0;
+      background:linear-gradient(180deg,#262632,#1b1b26);
+      box-shadow:inset 0 1px 0 #ffffff10;
+      color:#d7d3cb;
+      position:relative;
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .brand-mark {
+      display:grid;
+      place-items:center;
+      width:22px;
+      height:22px;
+      border-radius:2px;
+      color:#16161d;
+      background:linear-gradient(180deg,#ff7a32,#ff4f17);
+      box-shadow:inset 0 1px 0 #ffb07a, 0 0 16px #ff5c1a66, 0 8px 18px #0008;
+      font:900 .62rem var(--mono);
+      letter-spacing:.06em;
+    }
+
+    .brand-title {
+      font:900 .7rem var(--mono);
+      color:#8f91a3;
+      letter-spacing:.22em;
+      font-weight:800;
+      text-transform:uppercase;
+    }
+
+    .status-lights {
+      display:flex;
+      align-items:center;
+      gap:13px;
+      color:#77788a;
+      font:800 .58rem var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-left:auto;
+      margin-right:18px;
+    }
+
+    .status-lights span::before {
+      content:"";
+      display:inline-block;
+      width:6px;
+      height:6px;
+      margin-right:5px;
+      border-radius:50%;
+      background:#343644;
+      vertical-align:1px;
+    }
+
+    .status-lights span:first-child::before {
+      background:#42d75b;
+      box-shadow:0 0 10px #42d75b;
+    }
+
+    .library-link {
+      border:1px solid #434456;
+      border-radius:2px;
+      background:linear-gradient(180deg,#242533,#171822);
+      color:#d7d3cb;
+      cursor:pointer;
+      padding:7px 12px;
+      font:900 .68rem var(--mono);
+      letter-spacing:.08em;
+      white-space:nowrap;
+      box-shadow:inset 0 1px 0 #ffffff12, 0 8px 18px #0005;
+      transition:
+        transform 120ms ease-out,
+        box-shadow 120ms ease-out,
+        border-color 140ms ease-out,
+        color 140ms ease-out,
+        background 140ms ease-out;
+    }
+
+    .library-link:hover {
+      border-color:#ff5c1a;
+      color:#ff8b57;
+      background:linear-gradient(180deg,#2b2c39,#191a24);
+    }
+
+    .library-link:active {
+      transform:translateY(2px);
+      box-shadow:inset 0 3px 8px #0009;
+      background:#14151e;
+    }
+
+    .top-actions {
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
+
+    .ghost-button {
+      position:absolute;
+      top:50%;
+      width:16px;
+      height:16px;
+      transform:translateY(-50%);
+      border:1px solid #434456;
+      border-radius:50%;
+      background:#242533;
+      color:#74778c;
+      cursor:pointer;
+      padding:0;
+      font:900 12px/14px var(--mono);
+      text-align:center;
+      box-shadow:inset 0 1px 0 #ffffff0f;
+      pointer-events:auto;
+      overflow:hidden;
+      transition:color 140ms ease-out, border-color 140ms ease-out, background 140ms ease-out;
+    }
+
+    #openSettings { left:12px }
+    #openLibrary { right:12px }
+    .ghost-button:hover { border-color:#66687c; color:#a9aabd }
+    .ghost-button:active {
+      background:#1b1c27;
+      color:#ff6a2a;
+    }
+
+    header {
+      position:relative;
+      display:grid;
+      place-items:center;
+      min-height:auto;
+      transition:min-height 420ms ease;
+      margin-top:0;
+    }
+
+    body.has-mode header,
+    body.has-ticket header { min-height:auto }
+
+    .machine {
+      position:relative;
+      width:100%;
+      min-height:300px;
+      padding:12px 24px 20px;
+      border-radius:0 0 3px 3px;
+      border:1px solid #3a3a4e;
+      border-top-color:#2c2d3b;
+      background:
+        linear-gradient(180deg, #242531 0%, #181922 54%, #12131a 100%);
+      box-shadow:
+        inset 0 1px 0 #ffffff12,
+        inset 0 -12px 24px #0009,
+        0 35px 90px #000c;
+      overflow:hidden;
+    }
+
+    .machine::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 52% -10%, #ffffff12 0, transparent 30%),
+        linear-gradient(90deg, transparent, #ffffff08 50%, transparent);
+      opacity:.7;
+    }
+
+    .machine::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.13;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+      mix-blend-mode:screen;
+    }
+
+    .machine-head {
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      display:none;
+      margin-bottom:14px;
+      color:#626479;
+      font:900 .68rem var(--mono);
+      letter-spacing:.22em;
+      text-transform:uppercase;
+    }
+
+    .machine-head-left {
+      display:flex;
+      align-items:center;
+      gap:9px;
+    }
+
+    .machine-head-left b {
+      display:inline-grid;
+      place-items:center;
+      width:23px;
+      height:23px;
+      border-radius:4px;
+      color:#171821;
+      background:var(--orange);
+      letter-spacing:0;
+      box-shadow:0 0 14px #ff5c1a55;
+    }
+
+    .machine-leds {
+      display:flex;
+      align-items:center;
+      gap:13px;
+      letter-spacing:.12em;
+    }
+
+    .machine-leds span::before {
+      content:"";
+      display:inline-block;
+      width:7px;
+      height:7px;
+      margin-right:5px;
+      border-radius:50%;
+      background:#343644;
+      vertical-align:1px;
+    }
+
+    .machine-leds span:nth-child(1)::before { background:#42d75b; box-shadow:0 0 10px #42d75b }
+    .machine-leds span:nth-child(2)::before,
+    body.has-mode .machine-leds span:nth-child(3)::before,
+    body.is-printing .machine-leds span:nth-child(4)::before {
+      background:var(--orange);
+      box-shadow:0 0 12px #ff5c1a;
+    }
+
+    .screen {
+      position:relative;
+      z-index:1;
+      height:190px;
+      border:2px solid #0C1626;
+      border-radius:2px;
+      padding:24px 24px;
+      overflow:hidden;
+      background:
+        linear-gradient(180deg, #040e1c 0, #03070d 100%);
+      box-shadow:inset 0 0 50px #000d, 0 0 0 7px #101119, 0 18px 38px #0008;
+    }
+
+    .screen::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(0deg, #ffffff09 0 1px, transparent 1px 4px),
+        radial-gradient(circle at 50% 20%, #ffffff10, transparent 30%);
+      mix-blend-mode:screen;
+    }
+
+    .screen::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:radial-gradient(circle at 50% 50%, transparent 48%, #000c 100%);
+    }
+
+    .screen-copy,
+    .screen-title,
+    .screen-subtitle,
+    .waveform,
+    .mini-bars {
+      position:relative;
+      z-index:2;
+    }
+
+    .screen-copy {
+      color:#ff5c1a;
+      opacity:.55;
+      font:900 10px var(--mono);
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      margin-bottom:6px;
+    }
+
+    .screen-title {
+      color:#ff9060;
+      font-size:22px;
+      line-height:1.2;
+      font-weight:700;
+      letter-spacing:.04em;
+      text-shadow:0 0 14px #ff5c1aa6;
+      font-family:"Songti SC","Noto Serif SC","PingFang SC",var(--sans);
+      transform:none;
+      width:max-content;
+      max-width:70%;
+      padding-right:16px;
+      background:transparent;
+    }
+
+    .screen-subtitle {
+      margin-top:5px;
+      color:#ff5c1a;
+      opacity:.38;
+      font:900 10px var(--mono);
+      letter-spacing:.12em;
+    }
+
+    .waveform {
+      position:absolute;
+      right:30px;
+      left:330px;
+      top:64px;
+      height:126px;
+      opacity:0;
+      pointer-events:none;
+    }
+
+    .grid-line { fill:none; stroke:var(--crt-line); stroke-width:1 }
+    .wave-glow { fill:none; stroke:var(--orange); stroke-width:8; opacity:.08; filter:blur(4px) }
+    .wave-main { fill:none; stroke:var(--orange); stroke-linecap:round; stroke-width:2.2; opacity:.78 }
+
+    .mini-bars {
+      display:flex;
+      align-items:end;
+      gap:2px;
+      height:28px;
+      margin-top:27px;
+      opacity:.9;
+    }
+
+    .signal-status {
+      position:relative;
+      z-index:2;
+      margin-top:8px;
+      color:#ff5c1a;
+      opacity:.30;
+      font:900 9px var(--mono);
+      letter-spacing:.30em;
+    }
+
+    .mini-bars i {
+      width:3px;
+      min-height:4px;
+      background:var(--orange);
+      box-shadow:0 0 9px #ff5c1a66;
+      animation:barPulse 780ms ease-in-out infinite alternate;
+    }
+
+    .mini-bars i:nth-child(2n) { animation-duration:540ms }
+    .mini-bars i:nth-child(3n) { animation-duration:920ms }
+    .mini-bars i:nth-child(5n) { animation-duration:660ms }
+
+    .mode-zone {
+      position:relative;
+      z-index:1;
+      margin-top:14px;
+    }
+
+    .mode-label {
+      margin-bottom:8px;
+      color:#5f6072;
+      font:900 8px var(--mono);
+      letter-spacing:.25em;
+      text-transform:uppercase;
+    }
+
+    .terminal-buttons {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+    }
+
+    .terminal-buttons button {
+      position:relative;
+      min-height:56px;
+      border:1px solid #343548;
+      border-radius:2px;
+      background:#1a1a25;
+      color:#8c8d9e;
+      cursor:pointer;
+      font-weight:900;
+      letter-spacing:.04em;
+      box-shadow:none;
+      transform:translateY(0);
+      transition:
+        transform 150ms cubic-bezier(.2,.9,.2,1.35),
+        box-shadow 150ms ease-out,
+        background 150ms ease-out,
+        color 150ms ease-out,
+        border-color 150ms ease-out;
+    }
+
+    .terminal-buttons button::before {
+      display:none;
+    }
+
+    .terminal-buttons button small {
+      display:block;
+      margin-bottom:3px;
+      color:#56586c;
+      font:900 8px var(--mono);
+      letter-spacing:.22em;
+      text-transform:uppercase;
+    }
+
+    .terminal-buttons button:hover {
+      color:#d8d3ca;
+      border-color:#4b4d62;
+      background:#1b1b28;
+    }
+
+    .terminal-buttons button:active {
+      transform:translateY(4px);
+      box-shadow:inset 0 5px 13px #000e, 0 2px 8px #0006;
+    }
+
+    .terminal-buttons button.active {
+      color:var(--orange);
+      border-color:var(--orange);
+      background:#1b1b29;
+      transform:translateY(2px);
+      box-shadow:inset 0 4px 12px #000c, inset 0 0 0 1px #ff5c1a55, 0 0 16px #ff5c1a18;
+    }
+
+    .terminal-buttons button:disabled {
+      cursor:not-allowed;
+      opacity:.42;
+      transform:none;
+      box-shadow:inset 0 1px 0 #ffffff0a, 0 8px 18px #0007;
+    }
+
+    .recent-panel {
+      display:none;
+      margin-top:18px;
+      border:1px solid #252638;
+      background:#171722;
+      color:#d8d3ca;
+      box-shadow:0 24px 60px #0007;
+    }
+
+    body.has-ticket .recent-panel {
+      display:none;
+    }
+
+    .recent-head {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      height:38px;
+      padding:0 16px;
+      border-bottom:1px solid #252638;
+      color:#5f6072;
+      font:900 .66rem var(--mono);
+      letter-spacing:.22em;
+      text-transform:uppercase;
+    }
+
+    .recent-panel .refresh {
+      color:#77788a;
+      font:900 .68rem var(--mono);
+      letter-spacing:.14em;
+    }
+
+    .recent-panel .job {
+      display:grid;
+      grid-template-columns:42px 1fr auto;
+      align-items:center;
+      gap:14px;
+      min-height:54px;
+      padding:10px 12px 10px 16px;
+      border-top:1px solid #252638;
+      color:#d8d3ca;
+      background:transparent;
+    }
+
+    .recent-panel .job:first-child { border-top:0 }
+
+    .job-index {
+      color:#46475c;
+      font:900 .72rem var(--mono);
+    }
+
+    .recent-panel .job strong {
+      color:#d8d3ca;
+      font-size:.86rem;
+      line-height:1.35;
+    }
+
+    .recent-panel .job-meta {
+      display:flex;
+      justify-content:flex-start;
+      gap:8px;
+      margin-top:3px;
+      color:#5e6076;
+      font:.68rem var(--mono);
+    }
+
+    .job-tag {
+      min-width:44px;
+      padding:4px 6px;
+      border:1px solid #284f89;
+      color:#4a86cf;
+      text-align:center;
+      font:900 .62rem var(--mono);
+      text-transform:uppercase;
+    }
+
+    .job-tag.deep { border-color:#2d6f34; color:#53aa5d }
+    .job-tag.failed { border-color:#7e3127; color:#d05a46 }
+
+    .recent-panel .empty {
+      color:#6d6e80;
+      padding:22px 16px;
+      line-height:1.7;
+    }
+
+    .layout {
+      display:grid;
+      grid-template-columns:minmax(0, 1fr);
+      justify-content:center;
+      align-items:start;
+      gap:24px;
+      max-height:0;
+      opacity:0;
+      overflow:hidden;
+      pointer-events:none;
+      transform:translateY(-16px);
+      transition:max-height 900ms cubic-bezier(.18,.82,.18,1), opacity 300ms ease, transform 620ms cubic-bezier(.18,.82,.18,1);
+    }
+
+    body.has-ticket .layout {
+      max-height:1800px;
+      opacity:1;
+      pointer-events:auto;
+      transform:translateY(0);
+      margin-top:14px;
+    }
+
+    body.has-output .layout { grid-template-columns:minmax(0, 1fr) }
+    body.has-output .layout aside.panel { display:none }
+    .layout aside.panel { display:none }
+
+    .panel {
+      position:relative;
+      color:var(--ink);
+      background:#f7f2e8;
+      border-left:1px solid #ddd4bc;
+      border-right:1px solid #ddd4bc;
+      border-bottom:1px solid #d0c7b0;
+      border-top:0;
+      border-radius:0;
+      min-width:0;
+      padding:28px 32px 34px 72px;
+      box-shadow:0 6px 28px rgba(0,0,0,.45), inset 0 1px 0 #fff7;
+    }
+
+    .panel::before {
+      content:"";
+      position:absolute;
+      left:24px;
+      top:0;
+      bottom:0;
+      width:14px;
+      background:radial-gradient(circle,#08090c 0 5px,transparent 5.6px) center 28px/14px 48px repeat-y;
+    }
+
+    .panel::after {
+      content:"";
+      position:absolute;
+      left:52px;
+      top:0;
+      bottom:0;
+      border-left:1px dotted #4a463f;
+      opacity:.7;
+    }
+
+    .paper-intro {
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:flex-start;
+      margin-bottom:22px;
+      padding-bottom:14px;
+      border-bottom:1px dashed var(--rule);
+    }
+
+    .paper-title {
+      margin:0;
+      color:#17151a;
+      font:900 1.1rem var(--sans);
+      letter-spacing:.02em;
+    }
+
+    .paper-note {
+      margin:7px 0 0;
+      max-width:56ch;
+      color:#706a5f;
+      font-size:.82rem;
+      line-height:1.7;
+    }
+
+    .tabs { display:none }
+
+    label {
+      display:block;
+      margin:16px 0 8px;
+      color:#201f1b;
+      font-size:.82rem;
+      font-weight:900;
+      letter-spacing:.02em;
+    }
+
+    textarea, select, input {
+      width:100%;
+      border:0;
+      border-bottom:1px dotted #24231f;
+      border-radius:0;
+      background:transparent;
+      color:var(--ink);
+      padding:12px 0;
+      outline:none;
+    }
+
+    textarea {
+      min-height:192px;
+      resize:vertical;
+      border:1px dotted #24231f;
+      padding:16px;
+      background:#f3eee2;
+      line-height:1.65;
+      font-family:var(--sans);
+    }
+
+    textarea:focus, select:focus, input:focus {
+      box-shadow:inset 0 0 0 2px #18182418;
+      border-color:#181824;
+    }
+
+    .hint, .clipboard-status {
+      color:#777063;
+      font-size:.8rem;
+      line-height:1.65;
+      margin:10px 0 0;
+    }
+
+    .clipboard-tools {
+      display:none;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:13px;
+    }
+
+    .clipboard-button {
+      border:1px dotted #24231f;
+      background:#e3dccd;
+      color:#181824;
+      cursor:pointer;
+      font-weight:900;
+      padding:10px 12px;
+    }
+
+    .options, .mode-options {
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .mode-options { margin-top:9px }
+
+    .mode-card {
+      position:relative;
+      display:block;
+      margin:0;
+      padding:14px 15px;
+      cursor:pointer;
+      color:#1c1b18;
+      background:#e2dac9;
+      border:1px dotted #24231f;
+    }
+
+    .mode-card input {
+      position:absolute;
+      opacity:0;
+      pointer-events:none;
+    }
+
+    .mode-card:has(input:checked) {
+      color:#f0eadc;
+      background:#111116;
+    }
+
+    .mode-card strong { display:block; font-size:.92rem }
+    .mode-card span {
+      display:block;
+      margin-top:5px;
+      color:#787064;
+      font-size:.78rem;
+      line-height:1.5;
+    }
+
+    .mode-card:has(input:checked) span { color:#bdb5a7 }
+
+    .quota-note {
+      display:none;
+      border:1px dotted #8a5a24;
+      background:#eee1cc;
+      color:#7b5427;
+      font-size:.78rem;
+      line-height:1.6;
+      margin:12px 0 0;
+      padding:10px 12px;
+    }
+
+    .submit {
+      width:100%;
+      margin-top:26px;
+      border:0;
+      background:#111116;
+      color:#f0eadc;
+      cursor:pointer;
+      padding:16px 18px;
+      font:900 1rem var(--sans);
+      letter-spacing:.08em;
+      box-shadow:0 10px 0 #c7bda9;
+      transition:transform 140ms ease-out, box-shadow 140ms ease-out, background 140ms ease-out;
+    }
+
+    .submit:hover { background:#232329 }
+    .submit:active {
+      transform:translateY(4px);
+      box-shadow:0 5px 0 #c7bda9, inset 0 4px 10px #0008;
+    }
+    .submit:disabled { opacity:.58; cursor:wait }
+
+    .process {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      margin-top:22px;
+      border-top:1px dotted #24231f;
+      border-bottom:1px dotted #24231f;
+    }
+
+    .step {
+      padding:12px 8px;
+      border-right:1px dotted #b8ad9d;
+      color:#777063;
+      text-align:center;
+      font:800 .68rem var(--mono);
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+
+    .step:last-child { border-right:0 }
+
+    .error {
+      margin-top:12px;
+      color:var(--danger);
+      font-size:.86rem;
+      line-height:1.5;
+    }
+
+    .side-title {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding-bottom:12px;
+      margin-bottom:8px;
+      border-bottom:1px dotted #24231f;
+    }
+
+    .side-title h2 {
+      margin:0;
+      font-size:.95rem;
+      letter-spacing:.06em;
+    }
+
+    .refresh {
+      border:0;
+      background:transparent;
+      color:#a23c2b;
+      cursor:pointer;
+      font-weight:900;
+    }
+
+    .job {
+      cursor:pointer;
+      padding:14px 0;
+      border-top:1px dotted #b8ad9d;
+    }
+    .job:first-of-type { border-top:0 }
+
+    .job strong {
+      display:block;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      font-size:.9rem;
+      line-height:1.45;
+    }
+
+    .job-meta {
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      color:#777063;
+      font-size:.72rem;
+      margin-top:6px;
+    }
+
+    .status { font-weight:900 }
+    .status.running,.status.queued { color:#254d75 }
+    .status.paused { color:#8b641f }
+    .status.completed { color:var(--green) }
+    .status.failed { color:var(--danger) }
+    .empty { color:#777063; line-height:1.7; padding:18px 0 }
+
+    dialog {
+      width:min(760px, calc(100% - 28px));
+      border:1px solid #2d2b27;
+      border-radius:0 0 8px 8px;
+      padding:0;
+      color:var(--ink);
+      background:var(--paper);
+      box-shadow:0 30px 100px #000b;
+    }
+
+    dialog::backdrop {
+      background:#050506cc;
+      backdrop-filter:blur(3px);
+    }
+
+    .dialog-head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:17px 22px;
+      border-bottom:1px dotted #24231f;
+    }
+
+    .dialog-head h3 {
+      margin:0;
+      font-size:.95rem;
+      letter-spacing:.02em;
+    }
+
+    .close {
+      width:28px;
+      height:28px;
+      border:1px solid #24231f;
+      background:transparent;
+      cursor:pointer;
+      font-size:1.1rem;
+      line-height:1;
+    }
+
+    .progress-card {
+      position:relative;
+      padding:30px 30px 34px;
+    }
+
+    .progress-card::before {
+      content:"";
+      position:absolute;
+      left:16px;
+      top:0;
+      bottom:0;
+      border-left:1px dotted #4a463f;
+    }
+
+    .progress-icon {
+      width:52px;
+      height:52px;
+      display:grid;
+      place-items:center;
+      margin-bottom:18px;
+      background:#111116;
+      color:#f0eadc;
+      font-size:1.2rem;
+    }
+
+    .progress-icon.running { animation:pulse 1.5s ease-in-out infinite }
+    .progress-icon.completed { background:var(--green) }
+    .progress-icon.failed { background:var(--danger) }
+
+    .progress-title {
+      margin:0 0 12px;
+      font-size:1.4rem;
+      line-height:1.2;
+    }
+
+    .progress-copy {
+      margin:0;
+      color:#777063;
+      line-height:1.7;
+      font-size:.9rem;
+    }
+
+    .progress-steps {
+      border-top:1px dashed #bdb39f;
+      border-bottom:1px dashed #bdb39f;
+      margin:18px 0 12px;
+      padding:10px 0;
+    }
+
+    .progress-step {
+      display:grid;
+      grid-template-columns:28px 1fr auto;
+      align-items:center;
+      gap:10px;
+      padding:7px 0;
+      color:#8a8375;
+      font-size:.82rem;
+    }
+
+    .progress-step .mark {
+      color:#aaa08e;
+      font-family:var(--mono);
+    }
+
+    .progress-step .mini {
+      color:#aaa08e;
+      font-size:.68rem;
+    }
+
+    .progress-step.done,
+    .progress-step.done .mark { color:var(--green) }
+    .progress-step.active {
+      color:#11110f;
+      font-weight:900;
+    }
+    .progress-step.active .mark {
+      color:var(--danger);
+      animation:pulseMark 1s ease-in-out infinite;
+    }
+    .progress-step.failed { color:var(--danger) }
+
+    .progress-track {
+      height:7px;
+      overflow:hidden;
+      border:1px dotted #24231f;
+      background:#e1dacb;
+      margin-top:18px;
+    }
+
+    .progress-bar {
+      height:100%;
+      width:42%;
+      background:#111116;
+      animation:travel 2.2s ease-in-out infinite;
+    }
+
+    .progress-bar.completed { width:100%; background:var(--green); animation:none }
+    .progress-bar.failed { width:100%; background:var(--danger); animation:none }
+
+    .read-button,.deepen-button,.rerun-button,.retry-button {
+      display:none;
+      margin-top:20px;
+      margin-right:8px;
+      border:1px dotted #24231f;
+      cursor:pointer;
+      font-weight:900;
+      padding:11px 16px;
+    }
+
+    .read-button,.retry-button {
+      color:#f0eadc;
+      background:#111116;
+    }
+    .deepen-button,.rerun-button {
+      color:#181824;
+      background:#e2dac9;
+    }
+
+    .episode-upgrade { display:none; margin-top:20px }
+    .episode-upgrade h5 {
+      margin:0 0 10px;
+      color:#777063;
+      font-size:.82rem;
+    }
+    .episode-row {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 0;
+      border-top:1px dotted #b8ad9d;
+    }
+    .ep-meta { flex:1; min-width:0 }
+    .ep-title {
+      font-weight:900;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .ep-podcast { color:#777063; font-size:.75rem; margin-top:2px }
+    .ep-upgrade {
+      border:1px dotted #24231f;
+      background:#e2dac9;
+      color:var(--danger);
+      cursor:pointer;
+      font-weight:900;
+      padding:7px 10px;
+      white-space:nowrap;
+    }
+
+    .settings-body {
+      padding:24px 30px 30px;
+    }
+
+    .settings-body p {
+      color:#777063;
+      line-height:1.7;
+      font-size:.86rem;
+      margin:0 0 18px;
+    }
+
+    .settings-status {
+      margin-bottom:16px;
+      padding:12px 14px;
+      color:#777063;
+      background:#e2dac9;
+      border:1px dotted #24231f;
+      font-size:.84rem;
+      line-height:1.6;
+    }
+
+    .settings-save {
+      margin-top:14px;
+      border:0;
+      background:#111116;
+      color:#f0eadc;
+      cursor:pointer;
+      font-weight:900;
+      padding:12px 18px;
+    }
+
+    body.is-routing .screen { animation:screenFlicker 600ms ease-in-out both }
+    body.is-routing .machine { animation:machineNudge 180ms linear 0s 4 }
+    body.is-printing .machine { animation:machineNudge 120ms linear 0s 8 }
+
+    @keyframes barPulse {
+      from { height:5px; opacity:.45 }
+      to { height:28px; opacity:1 }
+    }
+
+    @keyframes screenFlicker {
+      0%,100% { filter:none }
+      30% { filter:brightness(1.25) contrast(1.1) }
+      55% { filter:brightness(.7) contrast(1.4) }
+    }
+
+    @keyframes machineNudge {
+      0%,100% { transform:translate(0,0) }
+      25% { transform:translate(1px,-1px) }
+      50% { transform:translate(-1px,1px) }
+      75% { transform:translate(1px,1px) }
+    }
+
+    @keyframes pulse { 50% { transform:scale(1.05); background:#2b2924 } }
+    @keyframes pulseMark { 50% { opacity:.35 } }
+    @keyframes travel { 0% { transform:translateX(-110%) } 100% { transform:translateX(250%) } }
+
+    @media (max-width: 760px) {
+      main { width:min(100% - 18px, 1180px); padding-top:14px }
+      .topbar { align-items:flex-start; flex-wrap:wrap }
+      .status-lights { order:3; width:100%; font-size:.6rem; gap:10px }
+      .library-link { margin-left:auto; padding:6px 9px; font-size:.62rem }
+      .top-actions { margin-left:auto }
+      .machine { min-height:360px; padding:14px }
+      .machine-head { font-size:.58rem; letter-spacing:.12em }
+      .machine-leds { display:none }
+      .screen { height:210px; padding:24px 20px }
+      .screen-title { max-width:100%; font-size:1.8rem }
+      .waveform { left:20px; right:20px; top:92px; height:116px; opacity:.48 }
+      .terminal-buttons { grid-template-columns:1fr; gap:10px }
+      body.has-mode header, body.has-ticket header { min-height:auto }
+      .panel { padding:28px 22px 32px 58px }
+      .options, .mode-options { grid-template-columns:1fr }
+      body.has-output .layout { grid-template-columns:1fr }
+      .layout aside.panel { display:none }
+    }
+  </style>
+</head>
+
+<body>
+<main>
+  <div class="topbar">
+    <div class="brand" aria-label="播客研究所">
+      <span class="brand-mark">PI</span>
+      <span class="brand-title">Podcast Institute · 播客研究所</span>
+    </div>
+    <div class="status-lights" aria-hidden="true">
+      <span>PWR</span><span>SIG</span><span>PROC</span><span>OUT</span>
+    </div>
+    <button class="library-link" id="openProjectPage" type="button">项目介绍</button>
+    <button class="library-link" id="openLibraryText" type="button">网页书架 ↗</button>
+    <div class="top-actions">
+      <button class="ghost-button" id="openSettings" type="button" aria-label="转写设置" title="转写设置">＋</button>
+      <button class="ghost-button" id="openLibrary" type="button" aria-label="网页书架" title="网页书架">＋</button>
+    </div>
+  </div>
+
+  <header>
+    <section class="machine" aria-label="播客研究所工作台">
+      <div class="machine-head">
+        <div class="machine-head-left"><b>PI</b><span>播客研究所 · Podcast Lab</span></div>
+        <div class="machine-leds" aria-hidden="true"><span>待机</span><span>信号</span><span>整理</span><span>输出</span></div>
+      </div>
+
+      <div class="screen" aria-live="polite">
+        <div class="screen-copy" id="screenCopy">PODCAST INSTITUTE</div>
+        <div class="screen-title" id="screenTitle">播客研究所</div>
+        <div class="screen-subtitle" id="screenSubtitle">把播客整理成专题文章</div>
+        <svg class="waveform" viewBox="0 0 540 150" preserveAspectRatio="none" aria-hidden="true">
+          <path class="grid-line" d="M0 38 H540 M0 75 H540 M0 112 H540 M90 0 V150 M180 0 V150 M270 0 V150 M360 0 V150 M450 0 V150" />
+          <path class="wave-glow" d="M0 76 C40 48 78 48 116 76 S196 104 254 76 S350 48 410 76 S500 104 540 76" />
+          <path class="wave-main" d="M0 76 C40 48 78 48 116 76 S196 104 254 76 S350 48 410 76 S500 104 540 76" />
+        </svg>
+        <div class="mini-bars" aria-hidden="true">
+          <i style="height:18px"></i><i style="height:9px"></i><i style="height:24px"></i><i style="height:12px"></i><i style="height:28px"></i>
+          <i style="height:16px"></i><i style="height:7px"></i><i style="height:20px"></i><i style="height:13px"></i><i style="height:25px"></i>
+          <i style="height:11px"></i><i style="height:22px"></i><i style="height:15px"></i><i style="height:18px"></i><i style="height:10px"></i>
+          <i style="height:27px"></i><i style="height:14px"></i><i style="height:19px"></i><i style="height:8px"></i><i style="height:23px"></i>
+        </div>
+        <div class="signal-status" id="screenStatus">── SIGNAL READY ──</div>
+      </div>
+
+      <div class="mode-zone">
+        <div class="mode-label">MODE SELECT</div>
+        <div class="terminal-buttons" aria-label="选择开始方式">
+          <button data-mode="transcript" type="button" title="我已经有播客文稿"><small>已有文稿</small>粘贴文稿</button>
+          <button data-mode="topic" type="button" title="我想研究一个问题"><small>研究问题</small>输入问题</button>
+          <button data-mode="links" type="button" title="我已经有播客链接"><small>播客链接</small>粘贴链接</button>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <section class="layout">
+    <div class="panel">
+      <div class="paper-intro">
+        <div>
+          <h1 class="paper-title" id="paperTitle">输入材料</h1>
+          <p class="paper-note" id="paperNote">选择上方入口后，把对应内容放进来。系统会整理成一页可阅读、可检索、可分享的专题。</p>
+        </div>
+      </div>
+
+      <div class="tabs" aria-hidden="true">
+        <button class="tab active" data-mode="topic" type="button">输入问题</button>
+        <button class="tab" data-mode="links" type="button">粘贴链接</button>
+        <button class="tab" data-mode="transcript" type="button">粘贴文稿</button>
+      </div>
+
+      <form id="jobForm">
+        <label id="requestLabel" for="request">输入你关心的问题</label>
+        <textarea id="request" required placeholder="例如：AI Agent 从 Demo 走向真实业务，卡在哪一环？"></textarea>
+        <p class="hint" id="requestHint">适合只有一个研究方向，想让系统帮你找相关播客。</p>
+
+        <div class="clipboard-tools" id="clipboardTools">
+          <button class="clipboard-button" id="clipboardButton" type="button">从小宇宙复制文稿</button>
+          <p class="clipboard-status" id="clipboardStatus">只在点击后监听 120 秒，捕获到文稿就自动停止。</p>
+        </div>
+
+        <label id="productionLabel">整理方式</label>
+        <div class="mode-options" id="productionOptions">
+          <label class="mode-card">
+            <input type="radio" name="productionMode" value="quick" checked>
+            <strong>速读版（推荐）</strong>
+            <span>先整理观点地图，优先复用已有听稿和节目简介。</span>
+          </label>
+          <label class="mode-card">
+            <input type="radio" name="productionMode" value="deep">
+            <strong>精读版</strong>
+            <span>补全文稿依据，再把关键判断整理成专题。</span>
+          </label>
+        </div>
+        <p class="quota-note" id="quotaNote">精读版会使用云端 ASR 转写额度。已配置 Groq 时优先使用 Groq，未配置则使用腾讯云；如果不想消耗额度，可以先用速读版或粘贴已有文稿。</p>
+
+        <div class="options" id="discoveryOptions">
+          <div>
+            <label for="episodeCount">整理几期</label>
+            <select id="episodeCount">
+              <option value="3">3 期（精简）</option>
+              <option value="5" selected>5 期（推荐）</option>
+              <option value="6">6 期（深入）</option>
+              <option value="8">8 期（完整）</option>
+            </select>
+          </div>
+          <div>
+            <label for="recency">时间范围</label>
+            <select id="recency">
+              <option value="180" selected>最近半年</option>
+              <option value="90">最近 90 天</option>
+              <option value="30">最近一个月</option>
+              <option value="10">最近 10 天</option>
+              <option value="any">不限时间</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="submit" id="submitButton" type="submit">开始整理</button>
+        <div class="error" id="error"></div>
+      </form>
+
+      <div class="process" aria-hidden="true">
+        <div class="step">01<br>读取来源</div>
+        <div class="step">02<br>提取观点</div>
+        <div class="step">03<br>找共识分歧</div>
+        <div class="step">04<br>生成网页</div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="recent-panel">
+    <div class="recent-head">
+      <span>Recent Jobs</span>
+      <button class="refresh" id="refresh" type="button">刷新</button>
+    </div>
+    <div id="jobs"><div class="empty">还没有生成记录。选择一种方式开始。</div></div>
+  </section>
+</main>
+
+<dialog id="jobDialog">
+  <div class="dialog-head"><h3 id="dialogTitle">整理进度</h3><button class="close" type="button">×</button></div>
+  <div class="progress-card">
+    <div class="progress-icon running" id="progressIcon">✦</div>
+    <h4 class="progress-title" id="progressTitle">正在准备专题</h4>
+    <p class="progress-copy" id="progressCopy">正在准备，请稍候。</p>
+    <div class="progress-steps" id="progressSteps" aria-label="整理进度"></div>
+    <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    <button class="read-button" id="readButton" type="button">立即阅读</button>
+    <button class="deepen-button" id="deepenButton" type="button">补成精读版（会用转写额度）</button>
+    <div class="episode-upgrade" id="episodeUpgrade"></div>
+    <button class="rerun-button" id="rerunButton" type="button">重新生成精读版</button>
+    <button class="retry-button" id="retryButton" type="button">继续制作</button>
+  </div>
+</dialog>
+
+<dialog id="settingsDialog">
+  <div class="dialog-head"><h3>云端转写设置</h3><button class="close" id="settingsClose" type="button">×</button></div>
+  <div class="settings-body">
+    <div class="settings-status" id="asrStatus">正在检查配置…</div>
+    <p>密钥只保存到这台 Mac 的系统钥匙串，不会写入网页、项目文件或运行记录。Groq 官方当前标价约 $0.04/小时音频；腾讯云按你的资源包或计费方式消耗额度。</p>
+    <label for="asrProvider">转写后端</label>
+    <select id="asrProvider">
+      <option value="groq" selected>Groq（低成本快速）</option>
+      <option value="tencent">腾讯云（继续使用现有资源包）</option>
+    </select>
+    <div id="groqFields">
+      <label for="groqApiKey">Groq API Key</label>
+      <input id="groqApiKey" type="password" autocomplete="new-password" placeholder="gsk_…">
+    </div>
+    <div id="tencentFields">
+      <label for="secretId">SecretId</label>
+      <input id="secretId" autocomplete="off" placeholder="AKID…">
+      <label for="secretKey">SecretKey</label>
+      <input id="secretKey" type="password" autocomplete="new-password" placeholder="输入 SecretKey">
+    </div>
+    <button class="settings-save" id="saveAsr" type="button">保存并测试连接</button>
+  </div>
+</dialog>
+
+<script>
+  if (location.protocol === 'file:') {
+    location.replace('http://127.0.0.1:8765');
+  }
+
+  let mode = '';
+  let activeJob = null;
+  let pollTimer = null;
+  let clipboardPollTimer = null;
+  let modeSwitchToken = 0;
+  let demoMode = false;
+  const $ = selector => document.querySelector(selector);
+  const statusName = {queued:'已收到',running:'整理中',paused:'可继续',completed:'已完成',failed:'未完成'};
+  const progressSteps = ['读取来源','提取观点','找共识和分歧','整理成专题','生成阅读页'];
+
+  const screenModes = {
+    idle: {
+      copy:'PODCAST INSTITUTE',
+      title:'播客研究所',
+      subtitle:'把播客整理成专题文章',
+      status:'── SIGNAL READY ──',
+      paperTitle:'输入材料',
+      paperNote:'选择上方入口后，把对应内容放进来。系统会整理成一页可阅读、可检索、可分享的专题。'
+    },
+    transcript: {
+      copy:'你已经有文稿',
+      title:'文稿',
+      subtitle:'在此处粘贴播客文稿，不用再转写音频。',
+      status:'── TEXT READY ──',
+      paperTitle:'粘贴播客文稿',
+      paperNote:'适合你已经从小宇宙或其他工具复制出文稿。可以一次粘贴多期，每期之间用「---」分隔。'
+    },
+    topic: {
+      copy:'你想研究一个问题',
+      title:'问题',
+      subtitle:'输入问题，我会先帮你找相关播客，再整理观点。',
+      status:'── QUERY READY ──',
+      paperTitle:'输入你关心的问题',
+      paperNote:'不必先想好标题。写清楚你真正关心的困惑，系统会扩展关键词并寻找候选节目。'
+    },
+    links: {
+      copy:'你已经有播客链接',
+      title:'链接',
+      subtitle:'在此处粘贴播客链接，可以一次放多期。',
+      status:'── LINK READY ──',
+      paperTitle:'粘贴播客链接',
+      paperNote:'适合你已经选好要整理的节目。每行放一个小宇宙单集链接。'
+    }
+  };
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
+  }
+
+  function shortText(value) {
+    return String(value || '').split('\n')[0].slice(0, 42) || '未命名任务';
+  }
+
+  function selectedProductionMode() {
+    return document.querySelector('input[name="productionMode"]:checked').value;
+  }
+
+  function buildWavePath(time) {
+    const points = [];
+    const active = mode ? 1 : 0.42;
+    const amplitude = active * (18 + 10 * Math.sin(time * 0.0017));
+    for (let x = 0; x <= 540; x += 12) {
+      const y = 75
+        + Math.sin(x * 0.036 + time * 0.0036) * amplitude
+        + Math.sin(x * 0.095 - time * 0.0028) * (amplitude * 0.34)
+        + Math.sin(x * 0.015 + time * 0.0011) * 7;
+      points.push(`${x.toFixed(1)} ${y.toFixed(1)}`);
+    }
+    return 'M' + points.join(' L');
+  }
+
+  function animateWaveform(time) {
+    const d = buildWavePath(time);
+    const main = document.querySelector('.wave-main');
+    const glow = document.querySelector('.wave-glow');
+    if (main) main.setAttribute('d', d);
+    if (glow) glow.setAttribute('d', d);
+    requestAnimationFrame(animateWaveform);
+  }
+  requestAnimationFrame(animateWaveform);
+
+  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+  function updateQuotaNote() {
+    $('#quotaNote').style.display = mode && mode !== 'transcript' && selectedProductionMode() === 'deep' ? 'block' : 'none';
+  }
+
+  function updateModeUi() {
+    const current = screenModes[mode] || screenModes.idle;
+    document.body.classList.toggle('has-mode', Boolean(mode));
+    $('#screenCopy').textContent = current.copy;
+    $('#screenTitle').textContent = current.title;
+    $('#screenSubtitle').textContent = current.subtitle;
+    $('#screenStatus').textContent = current.status || '── SIGNAL READY ──';
+    $('#paperTitle').textContent = current.paperTitle;
+    $('#paperNote').textContent = current.paperNote;
+
+    if (!mode) {
+      updateQuotaNote();
+      return;
+    }
+
+    const links = mode === 'links';
+    const transcript = mode === 'transcript';
+
+    $('#requestLabel').textContent = transcript ? '在此处粘贴播客文稿' : (links ? '在此处粘贴播客链接' : '输入你关心的问题');
+    $('#request').placeholder = transcript
+      ? '可以先写标题或单集链接，再粘贴文稿。\n\n例如：\n标题：……\n链接：https://www.xiaoyuzhoufm.com/episode/...\n\n文稿：\n00:00 ……'
+      : (links
+        ? '每行一个链接，例如：\nhttps://www.xiaoyuzhoufm.com/episode/...'
+        : '例如：AI Agent 从 Demo 走向真实业务，卡在哪一环？');
+    $('#requestHint').textContent = transcript
+      ? '不会消耗云端转写额度。适合已经从播客 App 复制出文稿的情况。'
+      : (links
+        ? '每行一个链接。适合你已经选好要整理的播客单集。'
+        : '适合只有一个研究方向，想让系统帮你找相关播客。');
+    $('#productionLabel').style.display = transcript ? 'none' : 'block';
+    $('#productionOptions').style.display = transcript ? 'none' : 'grid';
+    $('#discoveryOptions').style.display = transcript ? 'none' : 'grid';
+    $('#clipboardTools').style.display = transcript ? 'flex' : 'none';
+    if (transcript) {
+      document.querySelector('input[name="productionMode"][value="quick"]').checked = true;
+    }
+    updateQuotaNote();
+  }
+
+  function setMode(nextMode) {
+    const token = ++modeSwitchToken;
+    document.body.classList.remove('has-ticket','has-output','is-printing');
+    document.body.classList.add('is-routing');
+    mode = nextMode;
+    document.querySelectorAll('.tab').forEach(item => item.classList.toggle('active', item.dataset.mode === mode));
+    document.querySelectorAll('.terminal-buttons button').forEach(item => item.classList.toggle('active', item.dataset.mode === mode));
+    updateModeUi();
+    setTimeout(() => {
+      if (token !== modeSwitchToken) return;
+      document.body.classList.remove('is-routing');
+      document.body.classList.add('has-ticket');
+      updateModeUi();
+      requestAnimationFrame(() => {
+        document.querySelector('.layout')?.scrollIntoView({behavior:'smooth', block:'start'});
+        $('#request')?.focus({preventScroll:true});
+      });
+    }, 220);
+  }
+
+  async function playPrintAnimation() {
+    document.body.classList.add('is-printing');
+    $('#screenCopy').textContent = '正在接收材料';
+    $('#screenSubtitle').textContent = '我会把来源、观点和依据整理成一页专题。';
+    await sleep(680);
+  }
+
+  function stopPrintAnimation() {
+    document.body.classList.remove('is-printing');
+    updateModeUi();
+  }
+
+  function renderProgressSteps(job) {
+    const box = $('#progressSteps');
+    if (!box) return;
+    let activeIndex = 0;
+    if (job.status === 'queued') activeIndex = 0;
+    if (job.status === 'running') {
+      const created = job.started_at || job.created_at || new Date().toISOString();
+      const elapsed = Math.max(0, (Date.now() - new Date(created).getTime()) / 1000);
+      activeIndex = Math.min(progressSteps.length - 1, Math.max(1, Math.floor(elapsed / 28) + 1));
+    }
+    if (job.status === 'paused') activeIndex = 2;
+    if (job.status === 'completed') activeIndex = progressSteps.length;
+    if (job.status === 'failed') activeIndex = Math.max(1, activeIndex);
+    box.innerHTML = progressSteps.map((step, index) => {
+      const done = job.status === 'completed' || index < activeIndex;
+      const active = job.status !== 'completed' && job.status !== 'failed' && index === activeIndex;
+      const failed = job.status === 'failed' && index === activeIndex;
+      const mark = done ? '[✓]' : (active ? '[·]' : (failed ? '[!]' : '[ ]'));
+      const mini = active ? '正在处理' : (done ? '完成' : '等待');
+      return `<div class="progress-step ${done ? 'done' : ''} ${active ? 'active' : ''} ${failed ? 'failed' : ''}">
+        <span class="mark">${mark}</span><span>${step}</span><span class="mini">${mini}</span>
+      </div>`;
+    }).join('');
+  }
+
+  document.querySelectorAll('.tab').forEach(button => button.onclick = () => {
+    if (button.disabled) return;
+    setMode(button.dataset.mode);
+  });
+  document.querySelectorAll('.terminal-buttons button').forEach(button => button.onclick = () => {
+    if (button.disabled) return;
+    setMode(button.dataset.mode);
+  });
+  document.querySelectorAll('input[name="productionMode"]').forEach(input => input.addEventListener('change', updateQuotaNote));
+  updateModeUi();
+
+  async function applyRuntimeFlags() {
+    try {
+      const response = await fetch('/api/health');
+      const health = await response.json();
+      demoMode = Boolean(health.demo_mode);
+      if (!demoMode) return;
+      document.querySelectorAll('[data-mode="topic"], [data-mode="transcript"]').forEach(button => {
+        button.disabled = true;
+        button.title = '公开演示版暂时只开放粘贴链接生成速读专题';
+      });
+      document.querySelector('input[name="productionMode"][value="quick"]').checked = true;
+      document.querySelector('input[name="productionMode"][value="deep"]').disabled = true;
+      $('#quotaNote').style.display = 'block';
+      $('#quotaNote').textContent = '公开演示版先开放“小宇宙链接 → 速读专题”。精读转写、问题检索和文稿导入暂不开放，避免消耗额度。';
+      setMode('links');
+    } catch (error) {
+      // 本地离线时保持原界面。
+    }
+  }
+
+  async function loadJobs() {
+    try {
+      const response = await fetch('/api/jobs');
+      const jobs = await response.json();
+      $('#jobs').innerHTML = jobs.length ? jobs.map((job, index) => {
+        const tag = job.mode === 'transcript'
+          ? 'TEXT'
+          : (job.production_mode === 'deep' || job.production_mode === 'deep_one' ? 'DEEP' : 'QUICK');
+        const tagClass = job.status === 'failed' ? 'failed' : (tag === 'DEEP' ? 'deep' : '');
+        return `
+        <div class="job" data-id="${job.id}" data-url="${escapeHtml(job.output_url || '')}" data-status="${escapeHtml(job.status || '')}">
+          <span class="job-index">${String(index + 1).padStart(3, '0')}</span>
+          <div>
+            <strong>${escapeHtml(shortText(job.request))}</strong>
+          <div class="job-meta">
+              <span>${job.mode === 'transcript' ? '文稿' : `${job.episode_count || ''} eps`}</span>
+            <span>${new Date(job.created_at).toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}</span>
+          </div>
+          </div>
+          <span class="job-tag ${tagClass}">${tag}</span>
+        </div>`;
+      }).join('') : '<div class="empty">还没有生成记录。选择一种方式开始。</div>';
+      document.querySelectorAll('.job').forEach(item => {
+        item.onclick = () => {
+          if (item.dataset.status === 'completed' && item.dataset.url) {
+            location.href = item.dataset.url;
+            return;
+          }
+          openJob(item.dataset.id);
+        };
+      });
+    } catch (error) {
+      $('#jobs').innerHTML = '<div class="empty">暂时无法读取任务。</div>';
+    }
+  }
+
+  async function openJob(id) {
+    document.body.classList.add('has-ticket','has-output');
+    activeJob = id;
+    $('#jobDialog').showModal();
+    await refreshJob();
+    clearInterval(pollTimer);
+    pollTimer = setInterval(refreshJob, 3000);
+  }
+
+  async function refreshJob() {
+    if (!activeJob) return;
+    const response = await fetch(`/api/jobs/${activeJob}`);
+    const job = await response.json();
+    $('#dialogTitle').textContent = `${statusName[job.status] || job.status}：${shortText(job.request)}`;
+    const views = {
+      queued: ['⋯','已收到，马上开始','正在把你的材料放进整理队列。'],
+      running: ['✦','正在整理专题',job.mode === 'transcript'
+        ? '正在基于你粘贴的文稿整理，不会消耗云端转写额度。'
+        : (job.production_mode === 'deep'
+          ? '正在补全文稿依据。长音频会受转写额度影响。'
+          : (job.production_mode === 'deep_one'
+            ? '正在只补你标记的这一期，完成后会自动复用。'
+            : '正在检索节目并整理速读版。'))],
+      paused: ['Ⅱ','可以稍后继续',job.message || '进度和素材已经保存，稍后可以从这里继续。'],
+      completed: ['✓','整理好了','点击下方按钮，直接开始阅读。'],
+      failed: ['!','这次没跑完','后台处理遇到了问题。记录已经保留，可以稍后重试。']
+    };
+    const view = views[job.status] || views.running;
+    $('#progressIcon').textContent = view[0];
+    $('#progressIcon').className = `progress-icon ${job.status}`;
+    $('#progressTitle').textContent = view[1];
+    $('#progressCopy').textContent = view[2];
+    renderProgressSteps(job);
+    $('#progressBar').className = `progress-bar ${job.status}`;
+    $('#readButton').style.display = job.status === 'completed' && job.output_url ? 'inline-block' : 'none';
+    $('#readButton').dataset.url = job.output_url || '';
+    const isQuick = !job.production_mode || job.production_mode === 'quick';
+    $('#deepenButton').style.display = job.status === 'completed' && job.mode !== 'transcript' && isQuick ? 'inline-block' : 'none';
+    $('#rerunButton').style.display = job.status === 'completed' && (job.production_mode === 'deep' || job.production_mode === 'deep_one') ? 'inline-block' : 'none';
+    renderEpisodeUpgrade(job);
+    $('#retryButton').style.display = ['paused','failed'].includes(job.status) ? 'inline-block' : 'none';
+    $('#retryButton').textContent = job.production_mode === 'deep' ? '继续补精读版' : '继续制作';
+    if (['completed','paused','failed'].includes(job.status)) {
+      clearInterval(pollTimer);
+      loadJobs();
+    }
+  }
+
+  $('#jobForm').onsubmit = async event => {
+    event.preventDefault();
+    $('#error').textContent = '';
+    const productionMode = selectedProductionMode();
+    if (mode !== 'transcript' && productionMode === 'deep') {
+      const count = Number($('#episodeCount').value);
+      const confirmed = confirm(`精读版会消耗云端 ASR 转写额度。\\n\\n本次计划整理 ${count} 期播客；如果每期约 1 小时，就会消耗约 ${count} 小时音频额度。\\n\\n如果不想消耗额度，建议先改选“速读版”或使用“粘贴文稿”。仍要继续吗？`);
+      if (!confirmed) return;
+    }
+    $('#submitButton').disabled = true;
+    $('#submitButton').textContent = '正在整理输入…';
+    await playPrintAnimation();
+    $('#submitButton').textContent = '正在创建任务…';
+    let jobOpened = false;
+    try {
+      const response = await fetch('/api/jobs', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          mode,
+          request:$('#request').value,
+          episode_count:Number($('#episodeCount').value),
+          recency:$('#recency').value,
+          production_mode:productionMode
+        })
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || '提交失败');
+      $('#request').value = '';
+      await loadJobs();
+      await sleep(180);
+      stopPrintAnimation();
+      jobOpened = true;
+      openJob(result.id);
+    } catch (error) {
+      $('#error').textContent = error.message;
+    } finally {
+      if (!jobOpened) stopPrintAnimation();
+      $('#submitButton').disabled = false;
+      $('#submitButton').textContent = '开始整理';
+    }
+  };
+
+  $('#refresh').onclick = loadJobs;
+
+  $('#clipboardButton').onclick = async () => {
+    if (clipboardPollTimer) clearInterval(clipboardPollTimer);
+    $('#clipboardButton').disabled = true;
+    $('#clipboardButton').textContent = '正在等待复制…';
+    $('#clipboardStatus').textContent = '请打开小宇宙 App → 该单集文稿 → 长按选择/全选 → 复制。复制后我会自动接收。';
+    try {
+      const response = await fetch('/api/clipboard/watch', {method:'POST'});
+      const session = await response.json();
+      if (!response.ok) throw new Error(session.error || '无法启动剪贴板监听');
+      clipboardPollTimer = setInterval(async () => {
+        const statusResponse = await fetch(`/api/clipboard/status/${session.id}`);
+        const status = await statusResponse.json();
+        if (!statusResponse.ok) throw new Error(status.error || '监听状态读取失败');
+        if (status.status === 'captured') {
+          clearInterval(clipboardPollTimer);
+          clipboardPollTimer = null;
+          $('#request').value = status.text || '';
+          $('#clipboardStatus').textContent = `已捕获文稿，约 ${Math.round(($('#request').value || '').length / 1000) / 10} 万字。你可以直接开始整理。`;
+          $('#clipboardButton').disabled = false;
+          $('#clipboardButton').textContent = '重新捕获文稿';
+        } else if (status.status === 'timeout') {
+          clearInterval(clipboardPollTimer);
+          clipboardPollTimer = null;
+          $('#clipboardStatus').textContent = status.message || '没有检测到文稿，可以手动粘贴。';
+          $('#clipboardButton').disabled = false;
+          $('#clipboardButton').textContent = '再试一次';
+        } else {
+          $('#clipboardStatus').textContent = status.message || '正在监听剪贴板…';
+        }
+      }, 1200);
+    } catch (error) {
+      if (clipboardPollTimer) clearInterval(clipboardPollTimer);
+      clipboardPollTimer = null;
+      $('#clipboardStatus').textContent = error.message;
+      $('#clipboardButton').disabled = false;
+      $('#clipboardButton').textContent = '从小宇宙复制文稿';
+    }
+  };
+
+  $('#readButton').onclick = () => {
+    const url = $('#readButton').dataset.url;
+    if (url) location.href = url;
+  };
+
+  async function renderEpisodeUpgrade(job) {
+    const box = $('#episodeUpgrade');
+    const isQuick = !job.production_mode || job.production_mode === 'quick';
+    if (!(job.status === 'completed' && job.mode !== 'transcript' && isQuick)) {
+      box.style.display = 'none';
+      box.innerHTML = '';
+      return;
+    }
+    let episodes = [];
+    try {
+      const r = await fetch(`/api/jobs/${job.id}/episodes`);
+      episodes = (await r.json()).episodes || [];
+    } catch (e) { episodes = []; }
+    if (!episodes.length) {
+      box.style.display = 'none';
+      box.innerHTML = '';
+      return;
+    }
+    box.style.display = 'block';
+    box.innerHTML = '<h5>只补某一期全文（一次一期，避开额度限流）</h5>' + episodes.map(ep => `
+      <div class="episode-row">
+        <div class="ep-meta">
+          <div class="ep-title">${escapeHtml(ep.title)}</div>
+          <div class="ep-podcast">${escapeHtml(ep.podcast || '')}</div>
+        </div>
+        <button class="ep-upgrade" data-ep="${escapeHtml(ep.episode_id)}" type="button">补这期全文</button>
+      </div>`).join('');
+    box.querySelectorAll('.ep-upgrade').forEach(btn => {
+      btn.onclick = async () => {
+        box.querySelectorAll('.ep-upgrade').forEach(b => b.disabled = true);
+        btn.textContent = '正在创建…';
+        const resp = await fetch(`/api/jobs/${job.id}/deepen`, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({episode: btn.dataset.ep})
+        });
+        const result = await resp.json();
+        if (!resp.ok) {
+          $('#progressCopy').textContent = result.error || '暂时无法创建补全文任务。';
+          box.querySelectorAll('.ep-upgrade').forEach(b => b.disabled = false);
+          btn.textContent = '补这期全文';
+          return;
+        }
+        await loadJobs();
+        activeJob = result.id;
+        await refreshJob();
+        clearInterval(pollTimer);
+        pollTimer = setInterval(refreshJob, 3000);
+      };
+    });
+  }
+
+  $('#deepenButton').onclick = async () => {
+    if (!activeJob) return;
+    $('#deepenButton').disabled = true;
+    $('#deepenButton').textContent = '正在创建…';
+    const response = await fetch(`/api/jobs/${activeJob}/deepen`, {method:'POST'});
+    const result = await response.json();
+    $('#deepenButton').disabled = false;
+    $('#deepenButton').textContent = '补成精读版（会用转写额度）';
+    if (!response.ok) {
+      $('#progressCopy').textContent = result.error || '暂时无法创建深度专题。';
+      return;
+    }
+    await loadJobs();
+    activeJob = result.id;
+    await refreshJob();
+    clearInterval(pollTimer);
+    pollTimer = setInterval(refreshJob, 3000);
+  };
+
+  $('#rerunButton').onclick = async () => {
+    if (!activeJob) return;
+    $('#rerunButton').disabled = true;
+    $('#rerunButton').textContent = '正在重新创建…';
+    const response = await fetch(`/api/jobs/${activeJob}/rerun`, {method:'POST'});
+    const result = await response.json();
+    $('#rerunButton').disabled = false;
+    $('#rerunButton').textContent = '重新生成精读版';
+    if (!response.ok) {
+      $('#progressCopy').textContent = result.error || '暂时无法重新创建任务。';
+      return;
+    }
+    await loadJobs();
+    activeJob = result.id;
+    await refreshJob();
+    clearInterval(pollTimer);
+    pollTimer = setInterval(refreshJob, 3000);
+  };
+
+  $('#retryButton').onclick = async () => {
+    if (!activeJob) return;
+    $('#retryButton').disabled = true;
+    $('#retryButton').textContent = '正在继续…';
+    const response = await fetch(`/api/jobs/${activeJob}/retry`, {method:'POST'});
+    const result = await response.json();
+    $('#retryButton').disabled = false;
+    $('#retryButton').textContent = '继续制作';
+    if (!response.ok) {
+      $('#progressCopy').textContent = result.error || '暂时无法继续，请稍后再试。';
+      return;
+    }
+    await refreshJob();
+    clearInterval(pollTimer);
+    pollTimer = setInterval(refreshJob, 3000);
+  };
+
+  function openLibraryPage() {
+    location.href = '/library';
+  }
+
+  $('#openLibrary').onclick = openLibraryPage;
+  $('#openLibraryText').onclick = openLibraryPage;
+  $('#openProjectPage').onclick = () => {
+    location.href = '/project.html';
+  };
+
+  async function refreshAsrStatus() {
+    const response = await fetch('/api/asr/status');
+    const status = await response.json();
+    if (status.configured) {
+      const groq = status.groq?.configured ? `Groq ${status.groq.api_key_hint || ''}` : '';
+      const tencent = status.tencent?.configured ? `腾讯云 ${status.tencent.secret_id_hint || ''}` : '';
+      $('#asrStatus').textContent = `已配置：${[groq,tencent].filter(Boolean).join('；')}。精读版会优先使用 ${status.preferred === 'groq' ? 'Groq' : '腾讯云'}。`;
+    } else {
+      $('#asrStatus').textContent = '尚未配置云端 ASR。你可以填 Groq API Key，或继续填腾讯云密钥。';
+    }
+  }
+
+  function updateAsrProviderFields() {
+    const provider = $('#asrProvider').value;
+    $('#groqFields').style.display = provider === 'groq' ? 'block' : 'none';
+    $('#tencentFields').style.display = provider === 'tencent' ? 'block' : 'none';
+  }
+
+  $('#openSettings').onclick = async () => {
+    $('#settingsDialog').showModal();
+    updateAsrProviderFields();
+    await refreshAsrStatus();
+  };
+  $('#settingsClose').onclick = () => $('#settingsDialog').close();
+  $('#asrProvider').onchange = updateAsrProviderFields;
+  $('#saveAsr').onclick = async () => {
+    $('#saveAsr').disabled = true;
+    $('#saveAsr').textContent = '正在验证…';
+    const provider = $('#asrProvider').value;
+    const payload = provider === 'groq'
+      ? {provider, api_key:$('#groqApiKey').value}
+      : {provider, secret_id:$('#secretId').value, secret_key:$('#secretKey').value};
+    const response = await fetch('/api/asr/configure', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    const result = await response.json();
+    $('#asrStatus').textContent = result.message || (response.ok ? '连接成功' : '连接失败');
+    $('#groqApiKey').value = '';
+    $('#secretKey').value = '';
+    $('#saveAsr').disabled = false;
+    $('#saveAsr').textContent = '保存并测试连接';
+    if (response.ok) {
+      $('#secretId').value = '';
+      await refreshAsrStatus();
+    }
+  };
+
+  $('.close').onclick = () => {
+    $('#jobDialog').close();
+    clearInterval(pollTimer);
+    activeJob = null;
+  };
+
+  $('#jobDialog').onclick = event => {
+    if (event.target === $('#jobDialog')) {
+      $('#jobDialog').close();
+      clearInterval(pollTimer);
+      activeJob = null;
+    }
+  };
+
+  // 首页默认是一张全新的工作台；历史专题只从“网页书架”进入。
+  applyRuntimeFlags();
+</script>
+</body>
+</html>

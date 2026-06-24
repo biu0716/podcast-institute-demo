@@ -1,0 +1,8 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+server.out
+jobs/*.log
+jobs/*.json
+.DS_Store
