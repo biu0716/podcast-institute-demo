@@ -37,6 +37,8 @@ http://127.0.0.1:8765/
 
 仓库已包含 `render.yaml`，可在 Render 中选择 Blueprint 部署。
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/biu0716/podcast-institute-demo)
+
 推荐环境变量：
 
 ```text
